@@ -4,13 +4,13 @@ Red Flags is all about the playful exploration of relationships. Share your insi
 
 ## Tech Stack  
 
-**Client:** tbd
+**Client:** React
 
-**Server:** Django, mongoDB  
+**Server:** Firebase
 
 ## Features  
 
-- Vote on red flags  
+- Vote on red flags
 - Demographic information  
 - Comment section for each red flag
 - Data visualization
@@ -19,6 +19,11 @@ Red Flags is all about the playful exploration of relationships. Share your insi
 ## Lessons Learned  
 
 What did you learn while building this project? What challenges did you face and how did you overcome them?  
+
+## Inspiration
+
+I recently saw a funny graphic and wanted to expand upon and crowdsource the idea:
+![Red Flags](src/assets/inspo.jpeg)
 
 ## License  
 
