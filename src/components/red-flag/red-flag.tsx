@@ -87,7 +87,11 @@ export const RedFlag = ({ className }: RedFlagProps) => {
                 onClose={handleModalClose}
                 onOpen={handleModalOpen}
                 open={open}
-                trigger={<Button onClick={handleSubmit}>{getSubmitButtonText()}</Button>}
+                trigger={
+                    <Button onClick={handleSubmit} disabled={!selectedEmoji}>
+                        {getSubmitButtonText()}
+                    </Button>
+                }
             >
                 <Modal.Header><center>Results</center></Modal.Header>
                 <center>
