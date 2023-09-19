@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import styles from './red-flag.module.scss';
 import { Button, Popup, Modal, Image, Header } from 'semantic-ui-react';
 import { ResultsPopup } from '../results-popup/results-popup';
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { collection, getDocs } from 'firebase/firestore';
@@ -23,7 +22,7 @@ const firebaseConfig = {
     measurementId: 'G-Z2J416WFPV',
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let rfNum = 0;
@@ -31,17 +30,15 @@ let rfNum = 0;
 export interface RedFlagProps {
     className?: string;
 }
+
 const fetchRedFlagsData = async () => {
     try {
         const querySnapshot = await getDocs(collection(db, 'RedFlags'));
         const rfSnapshot = querySnapshot.docs;
-        const currRedFlag = rfSnapshot[rfNum].get("redFlagText")
+        const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
         console.log(currRedFlag);
         rfNum++;
         return currRedFlag;
-        // Now, you have the data from the "RedFlags" collection in the redFlagsData array.
-        //console.log(redFlagsData);
-        // You can set this data to your component's state or use it as needed.
     } catch (error) {
         console.error('Error fetching RedFlags data:', error);
     }
@@ -51,6 +48,7 @@ export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
     const [displayText, setDisplayText] = useState('Made this website');
+    const [votes, setVotes] = useState<number[]>([0, 0, 0, 0]);
 
     const emojiTextMap: Record<string, string> = {
         '🤮': 'The ick',
@@ -61,6 +59,22 @@ export const RedFlag = ({ className }: RedFlagProps) => {
 
     const handleEmojiClick = (emoji: string) => {
         setSelectedEmoji(emoji);
+        switch (emoji) {
+            case '🤮':
+                setVotes([votes[0] + 1, votes[1], votes[2], votes[3]]);
+                break;
+            case '🚩':
+                setVotes([votes[0], votes[1] + 1, votes[2], votes[3]]);
+                break;
+            case '😐':
+                setVotes([votes[0], votes[1], votes[2] + 1, votes[3]]);
+                break;
+            case '😍':
+                setVotes([votes[0], votes[1], votes[2], votes[3] + 1]);
+                break;
+            default:
+                break;
+        }
     };
 
     const getSubmitButtonText = () => {
@@ -137,7 +151,7 @@ export const RedFlag = ({ className }: RedFlagProps) => {
                     <center>Results</center>
                 </Modal.Header>
                 <center>
-                    <ResultsPopup />
+                    <ResultsPopup votes={votes} />
                 </center>
                 <Modal.Actions>
                     <Button
