@@ -3,6 +3,27 @@ import classNames from 'classnames';
 import styles from './red-flag.module.scss';
 import { Button, Popup, Modal, Image, Header } from 'semantic-ui-react';
 import { ResultsPopup } from '../results-popup/results-popup';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBtIjb4LegCnZJIi8cGKO93k2kzAq0UEEc",
+  authDomain: "redflags-66580.firebaseapp.com",
+  projectId: "redflags-66580",
+  storageBucket: "redflags-66580.appspot.com",
+  messagingSenderId: "526603835693",
+  appId: "1:526603835693:web:3ad24f74ccd34d916a9ba4",
+  measurementId: "G-Z2J416WFPV"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 export interface RedFlagProps {
     className?: string;
