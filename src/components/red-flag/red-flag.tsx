@@ -52,7 +52,7 @@ export const RedFlag = ({ className }: RedFlagProps) => {
     const [displayText, setDisplayText] = useState('Placeholder red flag');
 
     const emojiTextMap: Record<string, string> = {
-        '🤮': 'The Ick',
+        '🤮': 'The ick',
         '🚩': 'Red flag',
         '😐': 'Meh',
         '😍': 'Love it',
