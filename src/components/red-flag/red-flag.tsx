@@ -37,7 +37,9 @@ export const RedFlag = ({ className }: RedFlagProps) => {
 
     return (
         <div className={classNames(styles.root, className)}>
-            Placeholder red flag
+            <div>
+                <Header as="h1">Placeholder red flag</Header>
+            </div>
             <div>
                 <Popup
                     content="The Ick"
@@ -90,10 +92,10 @@ export const RedFlag = ({ className }: RedFlagProps) => {
                 open={open}
                 trigger={<Button>Submit</Button>}
             >
-                <Modal.Header>Results</Modal.Header>
-                <Modal.Content></Modal.Content>
+                <Modal.Header><center>Results</center></Modal.Header>
+                <center>
                 <ResultsPopup />
-
+                </center>
                 <Modal.Actions>
                     <Button
                         content="Next Red Flag"

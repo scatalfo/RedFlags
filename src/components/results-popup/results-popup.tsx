@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import styles from './results-popup.module.scss';
-import { Progress, Divider } from 'semantic-ui-react';
+import { Progress } from 'semantic-ui-react';
 
 export interface ResultsPopupProps {
     className?: string;
@@ -16,23 +16,19 @@ export const ResultsPopup = ({ className }: ResultsPopupProps) => {
         <div className={classNames(styles.root, className)}>
             <div style={{ width: ' 450px' }}>
                 <h2 className={styles.resultText}> 🤮</h2>
-                <Progress percent={25} indicating progress="percent" />
+                <Progress percent={25} indicating progress="percent" className={styles.resultBar} />
             </div>
-            <Divider />
             <div style={{ width: ' 450px' }}>
                 <h2 className={styles.resultText}>🚩</h2>
-                <Progress percent={25} indicating progress="percent" />
-                <Divider />
+                <Progress percent={25} indicating progress="percent" className={styles.resultBar} />
             </div>
             <div style={{ width: ' 450px' }}>
                 <h2 className={styles.resultText}>😐</h2>
-                <Progress percent={25} indicating progress="percent" />
-                <Divider />
+                <Progress percent={25} indicating progress="percent" className={styles.resultBar} />
             </div>
             <div style={{ width: ' 450px' }}>
                 <h2 className={styles.resultText}>😍 </h2>
-                <Progress percent={25} indicating progress="percent" />
-                <Divider />
+                <Progress percent={25} indicating progress="percent" className={styles.resultBar} />
             </div>
         </div>
     );
