@@ -4,30 +4,47 @@ import styles from './red-flag.module.scss';
 import { Button, Popup, Modal, Image, Header } from 'semantic-ui-react';
 import { ResultsPopup } from '../results-popup/results-popup';
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBtIjb4LegCnZJIi8cGKO93k2kzAq0UEEc",
-  authDomain: "redflags-66580.firebaseapp.com",
-  projectId: "redflags-66580",
-  storageBucket: "redflags-66580.appspot.com",
-  messagingSenderId: "526603835693",
-  appId: "1:526603835693:web:3ad24f74ccd34d916a9ba4",
-  measurementId: "G-Z2J416WFPV"
+    apiKey: 'AIzaSyBtIjb4LegCnZJIi8cGKO93k2kzAq0UEEc',
+    authDomain: 'redflags-66580.firebaseapp.com',
+    projectId: 'redflags-66580',
+    storageBucket: 'redflags-66580.appspot.com',
+    messagingSenderId: '526603835693',
+    appId: '1:526603835693:web:3ad24f74ccd34d916a9ba4',
+    measurementId: 'G-Z2J416WFPV',
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
+let rfNum = 0;
 
 export interface RedFlagProps {
     className?: string;
 }
+const fetchRedFlagsData = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(db, 'RedFlags'));
+        const rfSnapshot = querySnapshot.docs;
+        const currRedFlag = rfSnapshot[rfNum].get("redFlagText")
+        console.log(currRedFlag);
+        return currRedFlag;
+        // Now, you have the data from the "RedFlags" collection in the redFlagsData array.
+        //console.log(redFlagsData);
+        // You can set this data to your component's state or use it as needed.
+    } catch (error) {
+        console.error('Error fetching RedFlags data:', error);
+    }
+};
 
 export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
@@ -56,13 +73,14 @@ export const RedFlag = ({ className }: RedFlagProps) => {
         setSelectedEmoji(null);
     };
 
-    const handleModalOpen = () => {
+    const handleModalOpen = async () => {
         setOpen(true);
+        const currRedFlag = await fetchRedFlagsData();
+        setDisplayText(currRedFlag);
     };
 
     const handleModalClose = () => {
         setOpen(false);
-        setDisplayText('New text after modal close');
     };
 
     return (
@@ -114,9 +132,11 @@ export const RedFlag = ({ className }: RedFlagProps) => {
                     </Button>
                 }
             >
-                <Modal.Header><center>Results</center></Modal.Header>
+                <Modal.Header>
+                    <center>Results</center>
+                </Modal.Header>
                 <center>
-                <ResultsPopup />
+                    <ResultsPopup />
                 </center>
                 <Modal.Actions>
                     <Button
