@@ -8,14 +8,10 @@ export interface RedFlagProps {
     className?: string;
 }
 
-/**
- * This component was created using Codux's Default new component template.
- * To create custom component templates, see https://help.codux.com/kb/en/article/kb16522
- */
-
 export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+    const [displayText, setDisplayText] = useState('Placeholder red flag');
 
     const emojiTextMap: Record<string, string> = {
         '🤮': 'The Ick',
@@ -35,62 +31,63 @@ export const RedFlag = ({ className }: RedFlagProps) => {
         return 'Submit';
     };
 
+    const handleSubmit = () => {
+        setSelectedEmoji(null);
+    };
+
+    const handleModalOpen = () => {
+        setOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setOpen(false);
+        setDisplayText('New text after modal close');
+    };
+
     return (
         <div className={classNames(styles.root, className)}>
             <div>
-                <Header as="h1">Placeholder red flag</Header>
+                <Header as="h1">{displayText}</Header>
             </div>
             <div>
-                <Popup
-                    content="The Ick"
-                    trigger={
-                        <button
-                            onClick={() => handleEmojiClick('🤮')}
-                            className={styles.choiceButtons}
-                        >
-                            🤮
-                        </button>
-                    }
-                />
-                <Popup
-                    content="Red flag"
-                    trigger={
-                        <button
-                            onClick={() => handleEmojiClick('🚩')}
-                            className={styles.choiceButtons}
-                        >
-                            🚩
-                        </button>
-                    }
-                />
-                <Popup
-                    content="Meh"
-                    trigger={
-                        <button
-                            onClick={() => handleEmojiClick('😐')}
-                            className={styles.choiceButtons}
-                        >
-                            😐
-                        </button>
-                    }
-                />
-                <Popup
-                    content="Love it"
-                    trigger={
-                        <button
-                            onClick={() => handleEmojiClick('😍')}
-                            className={styles.choiceButtons}
-                        >
-                            😍
-                        </button>
-                    }
-                />
+                <button
+                    onClick={() => handleEmojiClick('🤮')}
+                    className={classNames(styles.choiceButtons, {
+                        [styles.selected]: selectedEmoji === '🤮',
+                    })}
+                >
+                    🤮
+                </button>
+                <button
+                    onClick={() => handleEmojiClick('🚩')}
+                    className={classNames(styles.choiceButtons, {
+                        [styles.selected]: selectedEmoji === '🚩',
+                    })}
+                >
+                    🚩
+                </button>
+                <button
+                    onClick={() => handleEmojiClick('😐')}
+                    className={classNames(styles.choiceButtons, {
+                        [styles.selected]: selectedEmoji === '😐',
+                    })}
+                >
+                    😐
+                </button>
+                <button
+                    onClick={() => handleEmojiClick('😍')}
+                    className={classNames(styles.choiceButtons, {
+                        [styles.selected]: selectedEmoji === '😍',
+                    })}
+                >
+                    😍
+                </button>
             </div>
             <Modal
-                onClose={() => setOpen(false)}
-                onOpen={() => setOpen(true)}
+                onClose={handleModalClose}
+                onOpen={handleModalOpen}
                 open={open}
-                trigger={<Button>Submit</Button>}
+                trigger={<Button onClick={handleSubmit}>{getSubmitButtonText()}</Button>}
             >
                 <Modal.Header><center>Results</center></Modal.Header>
                 <center>
@@ -101,17 +98,11 @@ export const RedFlag = ({ className }: RedFlagProps) => {
                         content="Next Red Flag"
                         labelPosition="right"
                         icon="checkmark"
-                        onClick={() => setOpen(false)}
+                        onClick={handleModalClose}
                         positive
                     />
                 </Modal.Actions>
             </Modal>
         </div>
     );
-
-    function handleSubmit() {
-        setSelectedEmoji(null);
-
-        // Handle the submit logic here
-    }
 };
