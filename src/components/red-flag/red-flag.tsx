@@ -37,6 +37,7 @@ const fetchRedFlagsData = async () => {
         const rfSnapshot = querySnapshot.docs;
         const currRedFlag = rfSnapshot[rfNum].get("redFlagText")
         console.log(currRedFlag);
+        rfNum++;
         return currRedFlag;
         // Now, you have the data from the "RedFlags" collection in the redFlagsData array.
         //console.log(redFlagsData);
@@ -49,7 +50,7 @@ const fetchRedFlagsData = async () => {
 export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
-    const [displayText, setDisplayText] = useState('Placeholder red flag');
+    const [displayText, setDisplayText] = useState('Made this website');
 
     const emojiTextMap: Record<string, string> = {
         '🤮': 'The ick',
