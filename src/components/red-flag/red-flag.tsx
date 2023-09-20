@@ -26,6 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let rfNum = 0;
+let votes = [1, 1, 1, 1];
 
 export interface RedFlagProps {
     className?: string;
@@ -36,9 +37,13 @@ const fetchRedFlagsData = async () => {
         const querySnapshot = await getDocs(collection(db, 'RedFlags'));
         const rfSnapshot = querySnapshot.docs;
         const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
+        const votes1 = rfSnapshot[rfNum].get("votes1");
+        const votes2 = rfSnapshot[rfNum].get("votes2");
+        const votes3 = rfSnapshot[rfNum].get("votes3");
+        const votes4 = rfSnapshot[rfNum].get("votes4");
         console.log(currRedFlag);
         rfNum++;
-        return currRedFlag;
+        return [currRedFlag, votes1, votes2, votes3, votes4];
     } catch (error) {
         console.error('Error fetching RedFlags data:', error);
     }
@@ -48,7 +53,6 @@ export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
     const [displayText, setDisplayText] = useState('Made this website');
-    const [votes, setVotes] = useState<number[]>([0, 0, 0, 0]);
 
     const emojiTextMap: Record<string, string> = {
         '🤮': 'The ick',
@@ -59,22 +63,6 @@ export const RedFlag = ({ className }: RedFlagProps) => {
 
     const handleEmojiClick = (emoji: string) => {
         setSelectedEmoji(emoji);
-        switch (emoji) {
-            case '🤮':
-                setVotes([votes[0] + 1, votes[1], votes[2], votes[3]]);
-                break;
-            case '🚩':
-                setVotes([votes[0], votes[1] + 1, votes[2], votes[3]]);
-                break;
-            case '😐':
-                setVotes([votes[0], votes[1], votes[2] + 1, votes[3]]);
-                break;
-            case '😍':
-                setVotes([votes[0], votes[1], votes[2], votes[3] + 1]);
-                break;
-            default:
-                break;
-        }
     };
 
     const getSubmitButtonText = () => {
@@ -84,17 +72,43 @@ export const RedFlag = ({ className }: RedFlagProps) => {
         return 'Submit';
     };
 
-    const handleSubmit = () => {
+    const handleSubmit =  () => {
+        if (selectedEmoji) {
+            setOpen(true);
+            switch (selectedEmoji) {
+                case '🤮':
+                    votes[0]++;
+                    break;
+                case '🚩':
+                    votes[1]++;
+                    break;
+                case '😐':
+                    votes[2]++;
+                    break;
+                case '😍':
+                    votes[3]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         setSelectedEmoji(null);
     };
 
-    const handleModalOpen = async () => {
+    const handleModalOpen =  () => {
         setOpen(true);
-        const currRedFlag = await fetchRedFlagsData();
-        setDisplayText(currRedFlag);
     };
 
-    const handleModalClose = () => {
+    const handleModalClose = async () => {
+        const currRedFlag = await fetchRedFlagsData();
+        console.log(currRedFlag);
+        setDisplayText(currRedFlag[0]);
+        votes[0]=currRedFlag[1];
+        votes[1]=currRedFlag[2];
+        votes[2]=currRedFlag[3];
+        votes[3]=currRedFlag[4];    
+
         setOpen(false);
     };
 
