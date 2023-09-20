@@ -27,40 +27,48 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let rfNum = 0;
 let votes = [1, 1, 1, 1];
-let querySnapshot: { docs: any; } | null = null;
 export interface RedFlagProps {
     className?: string;
-}
-
-const fetchRedFlagsData = async () => {
+  }
+  
+  const initialDataPull = async () => {
     try {
-        if(querySnapshot===null) {
-
-            let querySnapshot = await getDocs(collection(db, 'RedFlags'));
-            const rfSnapshot = querySnapshot.docs;
-            const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
-            const votes1 = rfSnapshot[rfNum].get("votes1");
-            const votes2 = rfSnapshot[rfNum].get("votes2");
-            const votes3 = rfSnapshot[rfNum].get("votes3");
-            const votes4 = rfSnapshot[rfNum].get("votes4");
-            console.log(currRedFlag);
-            rfNum++;
-            return [currRedFlag, votes1, votes2, votes3, votes4];
-        }
-        const rfSnapshot = querySnapshot.docs;
-        const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
-        const votes1 = rfSnapshot[rfNum].get("votes1");
-        const votes2 = rfSnapshot[rfNum].get("votes2");
-        const votes3 = rfSnapshot[rfNum].get("votes3");
-        const votes4 = rfSnapshot[rfNum].get("votes4");
-        console.log(currRedFlag);
-        rfNum++;
-        return [currRedFlag, votes1, votes2, votes3, votes4];
+      return await getDocs(collection(db, 'RedFlags'));
     } catch (error) {
-        console.error('Error fetching RedFlags data:', error);
+      console.error('Error fetching RedFlags data:', error);
     }
-};
-
+  };
+  
+  let cachedData: any; // Declare cachedData variable
+  
+  const fetchRedFlagsData = async () => {
+    try {
+      if (!cachedData) {
+        // Cache the data on the first get
+        cachedData = await initialDataPull();
+      }
+  
+      const rfSnapshot = cachedData.docs;
+  
+      if (rfNum >= rfSnapshot.length) {
+        // Handle the case when you've gone through all the data
+        return [null, null, null, null, null];
+      }
+  
+      const currRedFlag = rfSnapshot[rfNum].get('redFlagText');
+      const votes1 = rfSnapshot[rfNum].get('votes1');
+      const votes2 = rfSnapshot[rfNum].get('votes2');
+      const votes3 = rfSnapshot[rfNum].get('votes3');
+      const votes4 = rfSnapshot[rfNum].get('votes4');
+  
+      console.log(currRedFlag);
+      rfNum++;
+      return [currRedFlag, votes1, votes2, votes3, votes4];
+    } catch (error) {
+      console.error('Error fetching RedFlags data:', error);
+    }
+  };
+  
 export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
