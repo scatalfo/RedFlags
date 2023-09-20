@@ -27,14 +27,26 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let rfNum = 0;
 let votes = [1, 1, 1, 1];
-
+let querySnapshot: { docs: any; } | null = null;
 export interface RedFlagProps {
     className?: string;
 }
 
 const fetchRedFlagsData = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, 'RedFlags'));
+        if(querySnapshot===null) {
+
+            let querySnapshot = await getDocs(collection(db, 'RedFlags'));
+            const rfSnapshot = querySnapshot.docs;
+            const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
+            const votes1 = rfSnapshot[rfNum].get("votes1");
+            const votes2 = rfSnapshot[rfNum].get("votes2");
+            const votes3 = rfSnapshot[rfNum].get("votes3");
+            const votes4 = rfSnapshot[rfNum].get("votes4");
+            console.log(currRedFlag);
+            rfNum++;
+            return [currRedFlag, votes1, votes2, votes3, votes4];
+        }
         const rfSnapshot = querySnapshot.docs;
         const currRedFlag = rfSnapshot[rfNum].get("redFlagText");
         const votes1 = rfSnapshot[rfNum].get("votes1");
