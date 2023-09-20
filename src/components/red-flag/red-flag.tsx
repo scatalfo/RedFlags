@@ -103,6 +103,9 @@ export const RedFlag = ({ className }: RedFlagProps) => {
     const handleModalClose = async () => {
         const currRedFlag = await fetchRedFlagsData();
         console.log(currRedFlag);
+        if (currRedFlag === undefined) {
+            return;
+        }
         setDisplayText(currRedFlag[0]);
         votes[0]=currRedFlag[1];
         votes[1]=currRedFlag[2];
