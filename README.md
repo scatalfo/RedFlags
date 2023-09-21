@@ -2,6 +2,9 @@
 
 Red Flags is all about the playful exploration of relationships. Share your insights, cast votes, and uncover red flags with a touch of humor.
 
+## Demo
+https://redflags-66580.web.app/
+
 ## Tech Stack  
 
 **Client:** React, Vite, Codux, TypeScript
