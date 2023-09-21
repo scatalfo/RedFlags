@@ -51,7 +51,7 @@ signInAnonymously(auth)
   
 const db = getFirestore(app);
 let rfNum = 0;
-let votes = [1, 1, 1, 1];
+let votes = [0, 0, 0, 0];
 export interface RedFlagProps {
     className?: string;
   }
@@ -77,7 +77,7 @@ export interface RedFlagProps {
   
       if (rfNum >= rfSnapshot.length) {
         // Handle the case when you've gone through all the data
-        return [null, null, null, null, null];
+        return ["Thanks for using my project, all out of red flags for now!", 0, 0, 0, 99];
       }
   
       const currRedFlag = rfSnapshot[rfNum].get('redFlagText');
@@ -97,7 +97,7 @@ export interface RedFlagProps {
 export const RedFlag = ({ className }: RedFlagProps) => {
     const [open, setOpen] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
-    const [displayText, setDisplayText] = useState('Made this website');
+    const [displayText, setDisplayText] = useState('Welcome to Red Flags! Tap an emoji to get started.');
 
     const emojiTextMap: Record<string, string> = {
         '🤮': 'The ick',
