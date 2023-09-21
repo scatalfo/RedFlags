@@ -14,10 +14,9 @@ https://redflags-66580.web.app/
 ## Features  
 
 - Vote on red flags
-- Demographic information  
-- Comment section for each red flag
 - Data visualization
-- User submitted red flags (manually reviewed)
+- Anonymous authentication to prevent repeat voters
+- Votes stored in the backend
 
 ## Lessons Learned  
 
@@ -25,6 +24,7 @@ https://redflags-66580.web.app/
 - I found CSS styling to be more painful than initially expected. It takes more work than I would have imagined to make all the buttons look how I want them to!
 - I learned about deploying a React app to Firebase, specifically, Vite, tends to do things a little bit differently, so there was a small learning curve there.
 - I managed to reduce the initially very high amount of database reads by caching the initial data from firebase, and using that for the rest of the session. This was a big win for performance client side, and especially server side, as it reduced the number of reads per full session from 900 to 30 (assuming there were 30 red flags in the database).
+- I learned about the new modular Firebase API for web, and how to leverage anonymous authentication to create a frictionless user experience.
 
 ## Inspiration
 
