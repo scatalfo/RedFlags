@@ -4,8 +4,10 @@ import styles from './red-flag.module.scss';
 import { Button, Popup, Modal, Image, Header } from 'semantic-ui-react';
 import { ResultsPopup } from '../results-popup/results-popup';
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { addDoc, arrayUnion, getFirestore, increment, query, updateDoc, where } from 'firebase/firestore';
 import { collection, getDocs } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,8 +24,31 @@ const firebaseConfig = {
     measurementId: 'G-Z2J416WFPV',
 };
 
-
+let uid: string | null =null;
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+signInAnonymously(auth)
+  .then(() => {
+    // Signed in..
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ...
+  });
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+        uid = user.uid;
+      console.log(uid);
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+  
 const db = getFirestore(app);
 let rfNum = 0;
 let votes = [1, 1, 1, 1];
@@ -92,21 +117,122 @@ export const RedFlag = ({ className }: RedFlagProps) => {
         return 'Submit';
     };
 
-    const handleSubmit =  () => {
+    const handleSubmit =  async () => {
         if (selectedEmoji) {
             setOpen(true);
             switch (selectedEmoji) {
                 case '🤮':
                     votes[0]++;
-                    break;
+                    if (uid) {
+                        try {
+                            // Check if a document with the same displayText exists
+                            const q = query(collection(db, "RedFlags"), where("redFlagText", "==", displayText));
+                            const qs = await getDocs(q);
+
+                            if (!qs.empty) {
+                                // Document with the same displayText exists, update its votes1
+                                const docRef = qs.docs[0].ref;
+                                if(!qs.docs[0].get('voters').includes(uid)) {
+                                await updateDoc(docRef, {
+                                    votes1: increment(1),
+                                    voters: arrayUnion(uid), 
+                                });
+                                }
+                                else{
+                                    console.log("Already voted");
+                                }
+    
+                            } else {
+                                console.log("No such document!");
+                            }
+                        } catch (error) {
+                            console.error('Error updating database:', error);
+                        }
+                    }
+                        break;
                 case '🚩':
                     votes[1]++;
+                    if (uid) {
+                        try {
+                            // Check if a document with the same displayText exists
+                            const q = query(collection(db, "RedFlags"), where("redFlagText", "==", displayText));
+                            const qs = await getDocs(q);
+
+                            if (!qs.empty) {
+                                // Document with the same displayText exists, update its votes1
+                                const docRef = qs.docs[0].ref;
+                                if(!qs.docs[0].get('voters').includes(uid)) {
+                                await updateDoc(docRef, {
+                                    votes2: increment(1),
+                                    voters: arrayUnion(uid),
+                                });
+                            }
+                            else{
+                                console.log("Already voted");
+                            }
+                            } else {
+                                console.log("No such document!");
+                            }
+                        } catch (error) {
+                            console.error('Error updating database:', error);
+                        }
+                    }
                     break;
                 case '😐':
                     votes[2]++;
+                    if (uid) {
+                        try {
+                            // Check if a document with the same displayText exists
+                            const q = query(collection(db, "RedFlags"), where("redFlagText", "==", displayText));
+                            const qs = await getDocs(q);
+
+                            if (!qs.empty) {
+                                // Document with the same displayText exists, update its votes1
+                                const docRef = qs.docs[0].ref;
+                                if(!qs.docs[0].get('voters').includes(uid)) {
+                                await updateDoc(docRef, {
+                                    votes3: increment(1),
+                                    voters: arrayUnion(uid),
+                                });
+                            }
+                            else{
+                                console.log("Already voted");
+                            }
+                            } else {
+                                console.log("No such document!");
+                            }
+                        } catch (error) {
+                            console.error('Error updating database:', error);
+                        }
+                    }
                     break;
                 case '😍':
                     votes[3]++;
+                    if (uid) {
+                        try {
+                            // Check if a document with the same displayText exists
+                            const q = query(collection(db, "RedFlags"), where("redFlagText", "==", displayText));
+                            const qs = await getDocs(q);
+
+                            if (!qs.empty) {
+                                // Document with the same displayText exists, update its votes1
+                                const docRef = qs.docs[0].ref;
+                                if(!qs.docs[0].get('voters').includes(uid)) {
+                                await updateDoc(docRef, {
+                                    votes4: increment(1),
+                                    voters: arrayUnion(uid),
+                                });
+                            }
+                            else{
+                                console.log("Already voted");
+                            }
+                            } else {
+                                console.log("No such document!");
+                            }
+                        } catch (error) {
+                            console.error('Error updating database:', error);
+                        }
+                    }
                     break;
                 default:
                     break;
