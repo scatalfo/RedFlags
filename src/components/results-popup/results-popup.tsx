@@ -16,7 +16,13 @@ export const ResultsPopup = ({ className, votes = [1, 1, 1, 1] }: ResultsPopupPr
             {votes.map((vote, index) => (
                 <div style={{ width: '450px' }} key={index}>
                     {getEmojiForVote(index)} {/* Display the emoji */}
-                    <Progress percent={((vote / totalVotes) * 100).toPrecision(4)} indicating progress="percent" className={styles.resultBar} />
+                    <Progress
+                        percent={((vote / totalVotes) * 100)}
+                        indicating
+                        progress="percent"
+                        className={styles.resultBar}
+                        precision={0}
+                    />
                 </div>
             ))}
         </div>
